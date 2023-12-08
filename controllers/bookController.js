@@ -2,6 +2,8 @@ const Book = require("../models/book");
 const Author = require("../models/author");
 const { body, validationResult } = require("express-validator");
 const asyncHandler = require("express-async-handler");
+const debug = require('debug')('book');
+
 
 exports.index = asyncHandler(async (req, res, next) => {
   // Get details of books, book instances, authors and genre counts (in parallel)
@@ -40,6 +42,7 @@ exports.book_detail = asyncHandler(async (req, res, next) => {
 
   if (book === null) {
     // No results.
+    debug(`book's id not found : ${req.params.id}`);
     const err = new Error("Book not found");
     err.status = 404;
     return next(err);
@@ -55,7 +58,7 @@ exports.book_detail = asyncHandler(async (req, res, next) => {
 
 // Display book create form on GET.
 exports.book_create_get = asyncHandler(async (req, res, next) => {
-  // Get all authors and genres, which we can use for adding to our book.
+  // Get all authors
   const allAuthors = await Author.find().sort({ family_name: 1 }).exec();
 
   res.render("book_form", {
@@ -67,28 +70,17 @@ exports.book_create_get = asyncHandler(async (req, res, next) => {
 
 // Handle book create on POST.
 exports.book_create_post = [
-  // Convert the genre to an array.
-  /*(req, res, next) => {
-    if (!Array.isArray(req.body.genre)) {
-      req.body.genre =
-        typeof req.body.genre === "undefined" ? [] : [req.body.genre];
-    }
-    next();
-  },*/
-
   // Validate and sanitize fields.
   body("title", "Title must not be empty.")
     .trim()
-    .isLength({ min: 1 })
-    .escape(),
+    .isLength({ min: 1 }),
   body("author", "Author must not be empty.")
     .trim()
     .isLength({ min: 1 })
     .escape(),
   body("summary", "Summary must not be empty.")
     .trim()
-    .isLength({ min: 1 })
-    .escape(),
+    .isLength({ min: 1 }),
   body("isbn", "ISBN must not be empty").trim().isLength({ min: 1 }).escape(),
   body("genre.*").escape(),
   // Process request after validation and sanitization.
@@ -132,6 +124,7 @@ exports.book_delete_get = asyncHandler(async (req, res, next) => {
   const book = await Book.findById(req.params.id).populate("author").exec();
 
   if(book==null){
+    debug(`book with id ${req.params.id} not found`);
     res.redirect('/catalog/books');
   }
 
@@ -157,6 +150,7 @@ exports.book_update_get = asyncHandler(async (req, res, next) => {
 
   if (book === null) {
     // No results.
+    debug(`id not found on update : ${req.params.id}`);
     const err = new Error("Book not found");
     err.status = 404;
     return next(err);
@@ -175,16 +169,14 @@ exports.book_update_post = [
   // Validate and sanitize fields.
   body("title", "Title must not be empty.")
     .trim()
-    .isLength({ min: 1 })
-    .escape(),
+    .isLength({ min: 1 }),
   body("author", "Author must not be empty.")
     .trim()
     .isLength({ min: 1 })
     .escape(),
   body("summary", "Summary must not be empty.")
     .trim()
-    .isLength({ min: 1 })
-    .escape(),
+    .isLength({ min: 1 }),
   body("isbn", "ISBN must not be empty").trim().isLength({ min: 1 }).escape(),
   body("genre.*").escape(),
 
