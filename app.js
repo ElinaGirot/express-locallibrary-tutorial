@@ -35,7 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const RateLimit = require('express-rate-limit');
 const limiter = RateLimit({
   windowMs : 1*60*1000,
-  max : 20,
+  max : 25,
 });
 app.use(limiter);
 
@@ -45,7 +45,7 @@ app.use('/catalog',catalogRouter);
 
 
 mongoose.set("strictQuery", false);
-const dev_db_url = "mongodb+srv://elinagirot:B204efm12@cluster0.9azhbnm.mongodb.net/local_library?retryWrites=true&w=majority";
+const dev_db_url = "mongodb+srv://elinagirot:projet@cluster0.9azhbnm.mongodb.net/local_library?retryWrites=true&w=majority";
 const mongoDB = process.env.MONGODB_URI || dev_db_url;
 
 main().catch((err) => console.log(err));
