@@ -9,16 +9,10 @@ console.log(
   
   const Book = require("./models/book");
   const Author = require("./models/author");
-  //const Genre = require("./models/genre");
-  //const BookInstance = require("./models/bookinstance");
-  
-  //const genres = [];
+
   const authors = [];
   const books = [];
-  //const bookinstances = [];
-  
-  // "mongodb+srv://elinagirot:B204efm12@cluster0.9azhbnm.mongodb.net/local_library?retryWrites=true&w=majority"
-  
+
   const mongoose = require("mongoose");
   mongoose.set("strictQuery", false);
   
@@ -30,10 +24,8 @@ console.log(
     console.log("Debug: About to connect");
     await mongoose.connect(mongoDB);
     console.log("Debug: Should be connected?");
-    //await createGenres();
     await createAuthors();
     await createBooks();
-    //await createBookInstances();
     console.log("Debug: Closing mongoose");
     mongoose.connection.close();
   }
@@ -42,13 +34,7 @@ console.log(
   // genre[0] will always be the Fantasy genre, regardless of the order
   // in which the elements of promise.all's argument complete.
 
-  /*async function genreCreate(index, name) {
-    const genre = new Genre({ name: name });
-    await genre.save();
-    genres[index] = genre;
-    console.log(`Added genre: ${name}`);
-  }*/
-  
+ 
   async function authorCreate(index, first_name, family_name, d_birth, d_death) {
     const authordetail = { first_name: first_name, family_name: family_name };
     if (d_birth != false) authordetail.date_of_birth = d_birth;
@@ -75,28 +61,6 @@ console.log(
     console.log(`Added book: ${title}`);
   }
   
-  /*async function bookInstanceCreate(index, book, imprint, due_back, status) {
-    const bookinstancedetail = {
-      book: book,
-      imprint: imprint,
-    };
-    if (due_back != false) bookinstancedetail.due_back = due_back;
-    if (status != false) bookinstancedetail.status = status;
-  
-    const bookinstance = new BookInstance(bookinstancedetail);
-    await bookinstance.save();
-    bookinstances[index] = bookinstance;
-    console.log(`Added bookinstance: ${imprint}`);
-  }*/
-  
-  /*async function createGenres() {
-    console.log("Adding genres");
-    await Promise.all([
-      genreCreate(0, "Fantasy"),
-      genreCreate(1, "Science Fiction"),
-      genreCreate(2, "French Poetry"),
-    ]);
-  }*/
   
   async function createAuthors() {
     console.log("Adding authors");
@@ -157,49 +121,3 @@ console.log(
     ]);
   }
   
-  /*async function createBookInstances() {
-    console.log("Adding authors");
-    await Promise.all([
-      bookInstanceCreate(0, books[0], "London Gollancz, 2014.", false, "Available"),
-      bookInstanceCreate(1, books[1], " Gollancz, 2011.", false, "Loaned"),
-      bookInstanceCreate(2, books[2], " Gollancz, 2015.", false, false),
-      bookInstanceCreate(3,
-        books[3],
-        "New York Tom Doherty Associates, 2016.",
-        false,
-        "Available"
-      ),
-      bookInstanceCreate(4,
-        books[3],
-        "New York Tom Doherty Associates, 2016.",
-        false,
-        "Available"
-      ),
-      bookInstanceCreate(5,
-        books[3],
-        "New York Tom Doherty Associates, 2016.",
-        false,
-        "Available"
-      ),
-      bookInstanceCreate(6,
-        books[4],
-        "New York, NY Tom Doherty Associates, LLC, 2015.",
-        false,
-        "Available"
-      ),
-      bookInstanceCreate(7,
-        books[4],
-        "New York, NY Tom Doherty Associates, LLC, 2015.",
-        false,
-        "Maintenance"
-      ),
-      bookInstanceCreate(8,
-        books[4],
-        "New York, NY Tom Doherty Associates, LLC, 2015.",
-        false,
-        "Loaned"
-      ),
-      bookInstanceCreate(9, books[0], "Imprint XXX2", false, false),
-      bookInstanceCreate(10, books[1], "Imprint XXX3", false, false),
-    ]);
-  }*/
