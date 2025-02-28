@@ -45,7 +45,7 @@ app.use('/catalog',catalogRouter);
 
 
 mongoose.set("strictQuery", false);
-const dev_db_url = "mongodb+srv://elinagirot:projet@cluster0.9azhbnm.mongodb.net/local_library?retryWrites=true&w=majority";
+const dev_db_url = "mongodb+srv://girotelina16:O10WPUJy2hAM1fft@cluster0.t0bf1.mongodb.net/local_library?retryWrites=true&w=majority&appName=Cluster0";
 const mongoDB = process.env.MONGODB_URI || dev_db_url;
 
 main().catch((err) => console.log(err));
